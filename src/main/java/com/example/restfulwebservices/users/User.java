@@ -1,20 +1,33 @@
 package com.example.restfulwebservices.users;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
+@Entity(name="user_details")
 public class User {
 
+    protected User(){
 
+    }
+    @Id
+    @GeneratedValue
     private Integer id;
     @Size(min=2, message="Name should be atleast 2 characters")
-    @JsonProperty("user_name")
+//    @JsonProperty("user_name")
     private String name;
     @Past(message="incorrect date")
     private LocalDate birthDate;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 
     public User(Integer id, String name, LocalDate birthDate) {
         this.id = id;
@@ -40,6 +53,14 @@ public class User {
 
     public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public void setBirthDate(LocalDate birthDate) {
